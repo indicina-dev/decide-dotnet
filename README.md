@@ -146,6 +146,62 @@ Console.WriteLine(response.Data.SpendAnalysis.ToJson());
 Console.WriteLine(response.Data.IncomeAnalysis.ToJson());
 ```
 
+### Running Analysis with ScoreCard
+You can run a statement analysis with scorecard ids you have created as described below.
+```csharp
+using IndicinaDecideLibrary;
+
+Customer customer = new Customer(customer_id: "12345", email: "example@email.com",
+    first_name: "John", last_name: "Doe", phone: "1234567890");
+
+// Define a list of precreated scorecard ids
+List<int> scorecardIds = new List<int> { 102, 103, 104 };
+
+// Define the statement format and string
+StatementFormat statementFormat = StatementFormat.MONO;
+
+string statementString = @"{
+    ""paging"": {
+        ""total"": 190,
+        ""page"": 2,
+        ""previous"": ""https://api.withmono.com/accounts/:id/transactions?page=2"",
+        ""next"": ""https://api.withmono.com/accounts/:id/transactions?page=3""
+    },
+    ""data"": [
+        {
+            ""_id"": ""5f171a54xxxxxxxxxxxx1154"",
+            ""amount"": 10000,
+            ""date"": ""2020-07-21T00:00:00.000Z"",
+            ""narration"": ""TRANSFER from JOHN DOE to JANE SMITH"",
+            ""type"": ""debit"",
+            ""category"": ""E-CHANNELS""
+        },
+        {
+            ""_id"": ""5d171a54xxxxxxxxxxxx6654"",
+            ""amount"": 20000,
+            ""date"": ""2020-07-21T00:00:00.000Z"",
+            ""narration"": ""TRANSFER from JOHN DOE to EVA SMITH"",
+            ""type"": ""debit"",
+            ""category"": ""E-CHANNELS""
+        }
+    ]
+}";
+
+DecideAPI api = new();
+
+// Make sure to pass the list of scorecard ids
+DefaultAnalysisResult response = api.AnalyzeJsonStatement(statementFormat, statementString, customer, scorecardIds);
+
+// You can use dot referencing to access the values in the response
+// We have used a convenient ToJson() to help you see the results
+Console.WriteLine(response.Status);
+Console.WriteLine(response.Data.CashFlowAnalysis.ToJson());
+Console.WriteLine(response.Data.BehaviouralAnalysis.ToJson());
+Console.WriteLine(response.Data.SpendAnalysis.ToJson());
+Console.WriteLine(response.Data.IncomeAnalysis.ToJson());
+Console.WriteLine(response.Data.ScorecardResult.ToJson());
+```
+
 Make sure to replace Bank.Access, customer, Currency.NGN, filePath, password, csvPath, format, and statementString with the appropriate values for your use case.
 
 ## Contributing
