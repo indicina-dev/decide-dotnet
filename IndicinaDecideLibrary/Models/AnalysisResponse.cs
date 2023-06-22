@@ -36,6 +36,7 @@ public class DecideResponse: JsonSerializable
     public CashFlowAnalysis CashFlowAnalysis { get; set; }
     public IncomeAnalysis IncomeAnalysis { get; set; }
     public SpendAnalysis SpendAnalysis { get; set; }
+    public ScorecardResult ScorecardResult { get; set; }
     public required string Id { get; set; }
 }
 

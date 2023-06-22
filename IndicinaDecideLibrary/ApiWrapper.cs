@@ -31,7 +31,7 @@ public class DecideAPI
             {
                 customer = customer.info,
                 bankStatement = bankStatement,
-                score_card_ids = scoreCardIds
+                scorecardIds = scoreCardIds
             };
 
             // Convert the request body to JSON
@@ -92,7 +92,7 @@ public class DecideAPI
             {
                 foreach (var scoreCardId in scoreCardIds)
                 {
-                    requestContent.Add(new StringContent(scoreCardId.ToString()), "score_card_ids[]");
+                    requestContent.Add(new StringContent(scoreCardId.ToString()), "scorecardIds[]");
                 }
             }
 
@@ -170,7 +170,7 @@ public class DecideAPI
             {
                 foreach (var scoreCardId in scoreCardIds)
                 {
-                    formDataContent.Add(new StringContent(scoreCardId.ToString()), "score_card_ids[]");
+                    formDataContent.Add(new StringContent(scoreCardId.ToString()), "scorecardIds[]");
                 }
             }
 
@@ -256,33 +256,134 @@ public class DecideAPI
         }
     }
 
-    // Scorecard Module
-    public void CreateScorecard()
+    public string CreateScorecard(CreateScorecardRequest request)
     {
-        // Implement the logic to create a scorecard using the API
-        // Include the access token in the request headers
-        // Handle any exceptions that may occur
+        var json = JsonConvert.SerializeObject(request);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        // Create the HTTP client
+        using (var client = new HttpClient())
+        {
+            // Set the authorization header
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authorization.GetAccessToken());
+            
+            var response = client.PostAsync("https://api.indicina.co/api/v3/scorecards", content).Result;
+            var responseContent = response.Content.ReadAsStringAsync().Result;
+
+            if (response.IsSuccessStatusCode && responseContent != null)
+            {
+                CreateScorecardResponse res = JsonConvert.DeserializeObject<CreateScorecardResponse>(responseContent);
+                return res.data.scorecard.id.ToString();
+            }
+            else
+            {
+                throw new Exception($"Failed to create scorecard. Status code: {response.StatusCode}, Error: {responseContent}");
+            }
+        };
     }
 
-    public void ReadScorecard()
+    public ReadScorecardResponse? ReadScorecard(string scorecardId)
     {
-        // Implement the logic to read a scorecard using the API
-        // Include the access token in the request headers
-        // Handle any exceptions that may occur
+        try
+        {
+            string url = $"https://api.indicina.co/api/v3/scorecards/{scorecardId}";
+
+            using (var client = new HttpClient())
+            {
+                // Set the authorization header
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authorization.GetAccessToken());
+
+                // Make the API call to read the scorecard
+                var response = client.GetAsync(url).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    var scorecardResponse = JsonConvert.DeserializeObject<ReadScorecardResponse>(result);
+                    return scorecardResponse;
+                }
+                else
+                {
+                    throw new DecideException("Error reading scorecard: " + response.ReasonPhrase);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new DecideException("An error occurred while reading the scorecard: " + ex.Message);
+        }
     }
 
-    public void DeleteScorecard()
+    public string DeleteScorecard(string scorecardId)
     {
-        // Implement the logic to delete a scorecard using the API
-        // Include the access token in the request headers
-        // Handle any exceptions that may occur
-    }
+        try
+        {
+            string url = $"https://api.indicina.co/api/v3/scorecards/{scorecardId}";
 
-    public void ExecuteScorecard()
+            using (var client = new HttpClient())
+            {
+                // Set the authorization header
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authorization.GetAccessToken());
+
+                // Make the API call to delete the scorecard
+                var response = client.DeleteAsync(url).Result;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new DecideException("Error deleting scorecard: " + response.ReasonPhrase);
+                }
+                return response.Content.ReadAsStringAsync().Result;
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new DecideException("An error occurred while deleting the scorecard: " + ex.Message);
+        }
+    }
+    
+    public ScorecardExecutionResult? ExecuteScorecard(string analysisId, List<int> scorecardIds)
     {
-        // Implement the logic to execute a scorecard using the API
-        // Include the access token in the request headers
-        // Handle any exceptions that may occur
+        try
+        {
+            string url = "https://api.indicina.co/api/v3/scorecards/execute";
+
+            // Create the request payload
+            var request = new
+            {
+                scorecardIds = scorecardIds,
+                analysisId = analysisId
+            };
+
+            // Convert the request payload to JSON
+            var jsonData = JsonConvert.SerializeObject(request);
+
+            using (var client = new HttpClient())
+            {
+                // Set the authorization header
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authorization.GetAccessToken());
+
+                // Set the request content
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                // Make the API call to execute the scorecard
+                var response = client.PostAsync(url, content).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    var executionResult = JsonConvert.DeserializeObject<ScorecardExecutionResult>(result);
+                    return executionResult;
+                }
+                else
+                {
+                    throw new DecideException("Error executing scorecard: " + response.ReasonPhrase);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new DecideException("An error occurred while executing the scorecard: " + ex.Message);
+        }
     }
 
 }
