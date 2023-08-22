@@ -1,3 +1,6 @@
+# nullable disable
+using Newtonsoft.Json;
+
 namespace IndicinaDecideLibrary;
 
 public static class Outcome
@@ -38,7 +41,7 @@ public static class RuleType
 {
     public const string ACCOUNT_SWEEP = "behaviouralAnalysis.accountSweep";
     public const string GAMBLING_RATE = "behaviouralAnalysis.gamblingRate";
-    public const string CONFIDENCE_INTERVAL_SALARY_DETECTION  = "incomeAnalysis.confidenceIntervalonSalaryDetection";
+    public const string CONFIDENCE_INTERVAL_SALARY_DETECTION = "incomeAnalysis.confidenceIntervalonSalaryDetection";
     public const string LOAN_INFLOW_RATE = "behaviouralAnalysis.loanInflowRate";
     public const string LOAN_REPAYMENT_INFLOW_RATE = "behaviouralAnalysis.loanRepaymentInflowRate";
     public const string SALARY_EARNER = "incomeAnalysis.salaryEarner";
@@ -156,122 +159,132 @@ public class ScorecardExecutionData
 }
 
 public class ScorecardResult : JsonSerializable
+{
+    public string Name { get; set; }
+
+    public string AnalysisId { get; set; }
+
+    public long ScorecardId { get; set; }
+
+    public string Status { get; set; }
+
+    public string Message { get; set; }
+
+    public AffordabilityModel Affordability { get; set; }
+
+    public RulesModel Rules { get; set; }
+
+    public class AffordabilityModel : JsonSerializable
     {
+        public Breakdown[] Breakdown { get; set; }
+
+        public string Currency { get; set; }
+    }
+
+    public class Breakdown : JsonSerializable
+    {
+        public long Tenor { get; set; }
+
+        public string TenorType { get; set; }
+
+        public double Value { get; set; }
+    }
+
+    public class RulesModel : JsonSerializable
+    {
+        public string Id { get; set; }
+
         public string Name { get; set; }
 
-        public string AnalysisId { get; set; }
+        public RuleSet RuleSet { get; set; }
 
-        public long ScorecardId { get; set; }
+        public BlockOutcome Outcome { get; set; }
 
-        public string Status { get; set; }
-
-        public string Message { get; set; }
-
-        public AffordabilityModel Affordability { get; set; }
-
-        public RulesModel Rules { get; set; }
-
-        public class AffordabilityModel : JsonSerializable
-        {
-            public Breakdown[] Breakdown { get; set; }
-
-            public string Currency { get; set; }
-        }
-
-        public class Breakdown : JsonSerializable
-        {
-            public long Tenor { get; set; }
-
-            public string TenorType { get; set; }
-
-            public double Value { get; set; }
-        }
-
-        public class RulesModel : JsonSerializable
-        {
-            public string Id { get; set; }
-
-            public string Name { get; set; }
-
-            public RuleSet RuleSet { get; set; }
-
-            public BlockOutcome Outcome { get; set; }
-
-            public BlockElement[] Blocks { get; set; }
-        }
-
-        public class BlockElement : JsonSerializable
-        {
-            public RuleElement[] Rules { get; set; }
-
-            public BlockBlock Block { get; set; }
-
-            public BlockOutcome Outcome { get; set; }
-        }
-
-        public class BlockBlock : JsonSerializable
-        {
-            public long Order { get; set; }
-
-            public string Operator { get; set; }
-
-            public string NegativeOutcome { get; set; }
-        }
-
-        public class BlockOutcome : JsonSerializable
-        {
-            public bool Pass { get; set; }
-
-            public string Action { get; set; }
-        }
-
-        public class RuleElement : JsonSerializable
-        {
-            public RuleRule Rule { get; set; }
-
-            public Input Input { get; set; }
-
-            public RuleOutcome Outcome { get; set; }
-        }
-
-        public class Input : JsonSerializable
-        {
-            public Value Value { get; set; }
-
-            public bool Skipped { get; set; }
-        }
-
-        public class RuleOutcome : JsonSerializable
-        {
-            public bool Pass { get; set; }
-        }
-
-        public class RuleRule : JsonSerializable
-        {
-            public long Order { get; set; }
-
-            public string Value { get; set; }
-
-            public string RuleType { get; set; }
-
-            public string Condition { get; set; }
-
-            public string Operator { get; set; }
-        }
-
-        public class RuleSet : JsonSerializable
-        {
-            public string NegativeOutcome { get; set; }
-
-            public string PositiveOutcome { get; set; }
-        }
-
-        public struct Value
-        {
-            public DateTimeOffset? DateTime;
-            public long? Integer;
-
-            public static implicit operator Value(DateTimeOffset DateTime) => new Value { DateTime = DateTime };
-            public static implicit operator Value(long Integer) => new Value { Integer = Integer };
-        }
+        public BlockElement[] Blocks { get; set; }
     }
+
+    public class BlockElement : JsonSerializable
+    {
+        public RuleElement[] Rules { get; set; }
+
+        public BlockBlock Block { get; set; }
+
+        public BlockOutcome Outcome { get; set; }
+    }
+
+    public class BlockBlock : JsonSerializable
+    {
+        public long Order { get; set; }
+
+        public string Operator { get; set; }
+
+        public string NegativeOutcome { get; set; }
+    }
+
+    public class BlockOutcome : JsonSerializable
+    {
+        public bool Pass { get; set; }
+
+        public string Action { get; set; }
+    }
+
+    public class RuleElement : JsonSerializable
+    {
+        public RuleRule Rule { get; set; }
+
+        public Input Input { get; set; }
+
+        public RuleOutcome Outcome { get; set; }
+    }
+
+    public class Input : JsonSerializable
+    {
+        public string Value { get; set; }
+
+        public bool Skipped { get; set; }
+    }
+
+    public class RuleOutcome : JsonSerializable
+    {
+        public bool Pass { get; set; }
+    }
+
+    public class RuleRule : JsonSerializable
+    {
+        public long Order { get; set; }
+
+        public string Value { get; set; }
+
+        public string RuleType { get; set; }
+
+        public string Condition { get; set; }
+
+        public string Operator { get; set; }
+    }
+
+    public class RuleSet : JsonSerializable
+    {
+        public string NegativeOutcome { get; set; }
+
+        public string PositiveOutcome { get; set; }
+    }
+
+    // public struct Value
+    // {
+    //     public DateTimeOffset? DateTime;
+    //     public long? Integer;
+
+    //     public static implicit operator Value(DateTimeOffset DateTime) => new Value { DateTime = DateTime };
+    //     public static implicit operator Value(long Integer) => new Value { Integer = Integer };
+    // }
+
+}
+
+public static class ScorecardResultExtensions
+{
+    public static string ToJson(this List<ScorecardResult> scorecardResults)
+    {
+        return JsonConvert.SerializeObject(scorecardResults);
+    }
+}
+

@@ -28,7 +28,7 @@ public class PdfAnalysisResultData
     public DecideResponse DecideResponse { get; set; }
 }
 
-public class DecideResponse: JsonSerializable
+public class DecideResponse : JsonSerializable
 {
     public string Country { get; set; }
     public string Currency { get; set; }
@@ -36,11 +36,11 @@ public class DecideResponse: JsonSerializable
     public CashFlowAnalysis CashFlowAnalysis { get; set; }
     public IncomeAnalysis IncomeAnalysis { get; set; }
     public SpendAnalysis SpendAnalysis { get; set; }
-    public ScorecardResult ScorecardResult { get; set; }
+    public List<ScorecardResult> ScorecardResults { get; set; }
     public required string Id { get; set; }
 }
 
-public class DefaultAnalysisResult: JsonSerializable
+public class DefaultAnalysisResult : JsonSerializable
 {
     public string Status { get; set; }
     public DecideResponse Data { get; set; }
