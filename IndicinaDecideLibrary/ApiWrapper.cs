@@ -12,7 +12,7 @@ public class DecideAPI
         _authorization = new Authorization();
     }
 
-    public DefaultAnalysisResult AnalyzeJsonStatement(StatementFormat statementFormat, string statement, Customer customer, List<int>? scoreCardIds = null)
+    public DefaultAnalysisResult AnalyzeJson(StatementFormat statementFormat, string statement, Customer customer, List<int>? scoreCardIds = null)
     {
         try
         {
@@ -30,7 +30,7 @@ public class DecideAPI
             var requestBody = new
             {
                 customer = customer.info,
-                bankStatement = bankStatement,
+                bankStatement,
                 scorecardIds = scoreCardIds
             };
 
@@ -78,7 +78,7 @@ public class DecideAPI
         }
     }
 
-    public DefaultAnalysisResult AnalyzeCsvStatement(string csvPath, Customer customer, List<int>? scoreCardIds = null)
+    public DefaultAnalysisResult AnalyzeCsv(string csvPath, Customer customer, List<int>? scoreCardIds = null)
     {
         try
         {
@@ -266,7 +266,7 @@ public class DecideAPI
         {
             // Set the authorization header
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authorization.GetAccessToken());
-            
+
             var response = client.PostAsync("https://api.indicina.co/api/v3/scorecards", content).Result;
             var responseContent = response.Content.ReadAsStringAsync().Result;
 
@@ -340,7 +340,7 @@ public class DecideAPI
             throw new DecideException("An error occurred while deleting the scorecard: " + ex.Message);
         }
     }
-    
+
     public ScorecardExecutionResult? ExecuteScorecard(string analysisId, List<int> scorecardIds)
     {
         try

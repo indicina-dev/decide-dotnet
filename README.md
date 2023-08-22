@@ -29,9 +29,10 @@ export INDICINA_CLIENT_SECRET=your_indicina_client_secret
 2. Create a new DecideAPI instance.
 3. Define necessary parameters needed as per the statement type (JSON, PDF, CSV)
 4. Call the necessary method as related to your statement type.
-    - AnalyzeJsonStatement
-    - AnalyzeCSVStatement
+    - AnalyzeJson
+    - AnalyzeCSV
     - InitiatePdfAnalysis
+    - GetPdfAnalysisResult
 5. Retrieve and process the analysis results returned by the library.
 
 Here's an example of using the library to analyze a PDF statement:
@@ -86,7 +87,7 @@ Customer customer = new Customer(customer_id: "12345", email: "example@email.com
 // Define the csv path
 string csvPath = "example.csv"
 
-DefaultAnalysisResult response = api.AnalyzeCsvStatement(csvPath: csvPath, customer: customer);
+DefaultAnalysisResult response = api.AnalyzeCsv(csvPath: csvPath, customer: customer);
 
 // You can use dot referencing to access the values in the response
 // We have used a convenient ToJson() to help you see the results
@@ -101,10 +102,10 @@ And here's an example of using the library to analyze a JSON statement:
 ```csharp
 using IndicinaDecideLibrary;
 
-DecideAPI api = new();
-
 Customer customer = new Customer(customer_id: "12345", email: "example@email.com",
     first_name: "John", last_name: "Doe", phone: "1234567890");
+
+List<int> scorecardIds = new List<int> { 123 };
 
 // Define the statement format and string
 StatementFormat statementFormat = StatementFormat.MONO;
@@ -136,7 +137,9 @@ string statementString = @"{
     ]
 }";
 
-DefaultAnalysisResult response = api.AnalyzeJsonStatement(statementFormat, statementString, customer);
+DecideAPI api = new();
+
+DefaultAnalysisResult response = api.AnalyzeJson(statementFormat, statementString, customer, scorecardIds);
 
 // You can use dot referencing to access the values in the response
 // We have used a convenient ToJson() to help you see the results
@@ -145,6 +148,7 @@ Console.WriteLine(response.Data.CashFlowAnalysis.ToJson());
 Console.WriteLine(response.Data.BehaviouralAnalysis.ToJson());
 Console.WriteLine(response.Data.SpendAnalysis.ToJson());
 Console.WriteLine(response.Data.IncomeAnalysis.ToJson());
+Console.WriteLine(response.Data.ScorecardResults.ToJson());
 ```
 
 ### Running Analysis with ScoreCard
@@ -152,13 +156,11 @@ You can run a statement analysis with scorecard ids you have created as describe
 ```csharp
 using IndicinaDecideLibrary;
 
-DecideAPI api = new();
-
 Customer customer = new Customer(customer_id: "12345", email: "example@email.com",
     first_name: "John", last_name: "Doe", phone: "1234567890");
 
-// Define a list of precreated scorecard ids
-List<int> scorecardIds = new List<int> { 102, 103, 104 };
+// Define a list of pre-created scorecard ids
+List<int> scorecardIds = new List<int> { 123 };
 
 // Define the statement format and string
 StatementFormat statementFormat = StatementFormat.MONO;
@@ -190,8 +192,9 @@ string statementString = @"{
     ]
 }";
 
-// Make sure to pass the list of scorecard ids
-DefaultAnalysisResult response = api.AnalyzeJsonStatement(statementFormat, statementString, customer, scorecardIds);
+DecideAPI api = new();
+
+DefaultAnalysisResult response = api.AnalyzeJson(statementFormat, statementString, customer, scorecardIds);
 
 // You can use dot referencing to access the values in the response
 // We have used a convenient ToJson() to help you see the results
@@ -200,7 +203,7 @@ Console.WriteLine(response.Data.CashFlowAnalysis.ToJson());
 Console.WriteLine(response.Data.BehaviouralAnalysis.ToJson());
 Console.WriteLine(response.Data.SpendAnalysis.ToJson());
 Console.WriteLine(response.Data.IncomeAnalysis.ToJson());
-Console.WriteLine(response.Data.ScorecardResult.ToJson());
+Console.WriteLine(response.Data.ScorecardResults.ToJson());
 ```
 
 Make sure to replace Bank.Access, customer, Currency.NGN, filePath, password, csvPath, format, and statementString with the appropriate values for your use case.

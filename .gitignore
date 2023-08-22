@@ -482,3 +482,4 @@ $RECYCLE.BIN/
 .vscode
 .vs
 IndicinaDecideConsole
+.env
