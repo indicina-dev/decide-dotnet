@@ -20,20 +20,25 @@ The decide-dotnet Library is a C# library that provides functionality to analyze
 2. Add the `decide-dotnet` library to your solution.
 
 ## Usage
-
-1. Make sure you have the required client ID and client secret set as environment variables.
-```bash
-export INDICINA_CLIENT_ID=your_indicina_client_id
-export INDICINA_CLIENT_SECRET=your_indicina_client_secret
+1. Add a using statement for the IndicinaDecideLibrary
+```csharp
+using IndicinaDecideLibrary;
 ```
-2. Create a new DecideAPI instance.
-3. Define necessary parameters needed as per the statement type (JSON, PDF, CSV)
-4. Call the necessary method as related to your statement type.
+2. Create a DecideAuth instance, passing your credentials.
+```csharp 
+DecideAuth auth = new(clientId, clientSecret);
+```
+3. Create a DecideAPI instance.
+```csharp
+DecideAPI api = new(auth);
+```
+4. Define necessary parameters needed as per the statement type (JSON, PDF, CSV)
+5. Call the necessary method as related to your statement type.
     - AnalyzeJson
     - AnalyzeCSV
     - InitiatePdfAnalysis
     - GetPdfAnalysisResult
-5. Retrieve and process the analysis results returned by the library.
+6. Retrieve and process the analysis results returned by the library.
 
 Here's an example of using the library to analyze a PDF statement:
 
@@ -43,9 +48,14 @@ You can then use this job_id to monitor the status of the pdf analysis Job
 ```csharp
 using IndicinaDecideLibrary;
 
-DecideAPI api = new();
+string clientId = Environment.GetEnvironmentVariable("INDICINA_CLIENT_ID");
+string clientSecret = Environment.GetEnvironmentVariable("INDICINA_CLIENT_SECRET");
 
-Customer customer = new Customer(customer_id: "12345", email: "example@email.com",
+DecideAuth auth = new(clientId, clientSecret);
+
+DecideAPI api = new(auth);
+
+Customer customer = new(customer_id: "12345", email: "example@email.com",
     first_name: "John", last_name: "Doe", phone: "1234567890");
 
 string jobID = api.InitiatePdfAnalysis(pdfPath: "test.pdf", currency: Currency.NGN, 
@@ -79,13 +89,18 @@ And here's an example of using the library to analyze a CSV statement:
 ```csharp
 using IndicinaDecideLibrary;
 
-DecideAPI api = new();
+string clientId = Environment.GetEnvironmentVariable("INDICINA_CLIENT_ID");
+string clientSecret = Environment.GetEnvironmentVariable("INDICINA_CLIENT_SECRET");
 
-Customer customer = new Customer(customer_id: "12345", email: "example@email.com",
+DecideAuth auth = new(clientId, clientSecret);
+
+DecideAPI api = new(auth);
+
+Customer customer = new(customer_id: "12345", email: "example@email.com",
     first_name: "John", last_name: "Doe", phone: "1234567890");
 
 // Define the csv path
-string csvPath = "example.csv"
+string csvPath = "example.csv";
 
 DefaultAnalysisResult response = api.AnalyzeCsv(csvPath: csvPath, customer: customer);
 
@@ -102,10 +117,15 @@ And here's an example of using the library to analyze a JSON statement:
 ```csharp
 using IndicinaDecideLibrary;
 
-Customer customer = new Customer(customer_id: "12345", email: "example@email.com",
-    first_name: "John", last_name: "Doe", phone: "1234567890");
+string clientId = Environment.GetEnvironmentVariable("INDICINA_CLIENT_ID");
+string clientSecret = Environment.GetEnvironmentVariable("INDICINA_CLIENT_SECRET");
 
-List<int> scorecardIds = new List<int> { 123 };
+DecideAuth auth = new(clientId, clientSecret);
+
+DecideAPI api = new(auth);
+
+Customer customer = new(customer_id: "12345", email: "example@email.com",
+    first_name: "John", last_name: "Doe", phone: "1234567890");
 
 // Define the statement format and string
 StatementFormat statementFormat = StatementFormat.MONO;
@@ -137,9 +157,7 @@ string statementString = @"{
     ]
 }";
 
-DecideAPI api = new();
-
-DefaultAnalysisResult response = api.AnalyzeJson(statementFormat, statementString, customer, scorecardIds);
+DefaultAnalysisResult response = api.AnalyzeJson(statementFormat, statementString, customer);
 
 // You can use dot referencing to access the values in the response
 // We have used a convenient ToJson() to help you see the results
@@ -156,11 +174,18 @@ You can run a statement analysis with scorecard ids you have created as describe
 ```csharp
 using IndicinaDecideLibrary;
 
-Customer customer = new Customer(customer_id: "12345", email: "example@email.com",
+string clientId = Environment.GetEnvironmentVariable("INDICINA_CLIENT_ID");
+string clientSecret = Environment.GetEnvironmentVariable("INDICINA_CLIENT_SECRET");
+
+DecideAuth auth = new(clientId, clientSecret);
+
+DecideAPI api = new(auth);
+
+Customer customer = new(customer_id: "12345", email: "example@email.com",
     first_name: "John", last_name: "Doe", phone: "1234567890");
 
 // Define a list of pre-created scorecard ids
-List<int> scorecardIds = new List<int> { 123 };
+List<int> scorecardIds = new() { 123 };
 
 // Define the statement format and string
 StatementFormat statementFormat = StatementFormat.MONO;
@@ -191,8 +216,6 @@ string statementString = @"{
         }
     ]
 }";
-
-DecideAPI api = new();
 
 DefaultAnalysisResult response = api.AnalyzeJson(statementFormat, statementString, customer, scorecardIds);
 
