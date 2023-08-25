@@ -276,7 +276,7 @@ public class DecideAPI
         }
         else
         {
-            throw new Exception($"Failed to create scorecard. Status code: {response.StatusCode}, Error: {responseContent}");
+            throw new DecideException($"Failed to create scorecard. Status code: {response.StatusCode}, Error: {responseContent}");
         }
     }
 

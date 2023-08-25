@@ -69,7 +69,7 @@ public static class BankExtensions
             }
             else
             {
-                throw new Exception($"Failed to get bank list. Status code: {response.StatusCode}");
+                throw new DecideException($"Failed to get bank list. Status code: {response.StatusCode}");
             }
         }
     }
