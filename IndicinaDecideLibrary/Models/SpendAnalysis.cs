@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace IndicinaDecideLibrary
 {
-    public class SpendAnalysis: JsonSerializable
+    public class SpendAnalysis : JsonSerializable
     {
         [JsonProperty("averageRecurringExpense")]
         public long AverageRecurringExpense { get; set; }
@@ -18,9 +18,9 @@ namespace IndicinaDecideLibrary
         public long AverageMonthlyExpenses { get; set; }
 
         [JsonProperty("expenseChannels")]
-        public ExpenseChannels[] ExpenseChannels { get; set; }
+        public List<ExpenseItem> ExpenseChannels { get; set; }
 
         [JsonProperty("expenseCategories")]
-        public ExpenseCategories[] ExpenseCategories { get; set; }
+        public List<ExpenseItem> ExpenseCategories { get; set; }
     }
 }

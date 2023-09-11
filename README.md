@@ -77,11 +77,17 @@ do
 
 // You can use dot referencing to access the values in the response
 // We have used a convenient ToJson() to help you see the results
-Console.WriteLine(resData.Data.Status);
-Console.WriteLine(resData.Data.DecideResponse.CashFlowAnalysis.ToJson());
-Console.WriteLine(resData.Data.DecideResponse.BehaviouralAnalysis.ToJson());
-Console.WriteLine(resData.Data.DecideResponse.SpendAnalysis.ToJson());
-Console.WriteLine(resData.Data.DecideResponse.IncomeAnalysis.ToJson());
+if (resData.Data.Status == "DONE")
+{
+    Console.WriteLine(resData.Data.DecideResponse.CashFlowAnalysis.ToJson());
+    Console.WriteLine(resData.Data.DecideResponse.BehaviouralAnalysis.ToJson());
+    Console.WriteLine(resData.Data.DecideResponse.SpendAnalysis.ToJson());
+    Console.WriteLine(resData.Data.DecideResponse.IncomeAnalysis.ToJson());
+}
+else
+{
+    Console.WriteLine($"Error: {resData.Data.Message}");
+}
 ```
 
 And here's an example of using the library to analyze a CSV statement:

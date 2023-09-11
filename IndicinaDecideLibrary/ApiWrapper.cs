@@ -143,7 +143,7 @@ public class DecideAPI
         }
     }
 
-    public string InitiatePdfAnalysis(string pdfPath, Currency currency, Bank bank, Customer customer, string? pdfPassword = null, string requestType = "score", List<int>? scoreCardIds = null)
+    public string InitiatePdfAnalysis(string pdfPath, Currency currency, string bank, Customer customer, string? pdfPassword = null, string requestType = "score", List<int>? scoreCardIds = null)
     {
         try
         {
@@ -166,7 +166,7 @@ public class DecideAPI
             // Create the request body
             formDataContent.Add(fileContent);
             formDataContent.Add(new StringContent(currency.ToString()), "currency");
-            formDataContent.Add(new StringContent(((int)bank).ToString()), "bank_code");
+            formDataContent.Add(new StringContent(bank), "bank_code");
             formDataContent.Add(new StringContent(customer.customer_id), "customer_id");
             formDataContent.Add(new StringContent(requestType), "request_type");
 

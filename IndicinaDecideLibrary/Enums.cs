@@ -9,30 +9,31 @@ public enum Currency
     KES
 }
 
-public enum Bank
+public static class Bank
 {
-    ACCESS = 44,
-    ALAT = 353,
-    CIB = 818147,
-    ECOBANK = 50,
-    FBN = 11,
-    FCMB = 214,
-    FIDELITY = 70,
-    GLOBUS = 103,
-    GTB = 58,
-    HSBC = 818039,
-    KEYSTONE = 82,
-    KUDA = 50211,
-    MBS = 41,
-    MPESA = 404001,
-    PROVIDUS = 101,
-    POLARIS = 76,
-    STANBIC = 221,
-    STERLING = 232,
-    UBA = 33,
-    UNITY = 215,
-    UNION = 32,
-    ZENITH = 57
+    public const string ACCESS = "044";
+    public const string ALAT = "035A";
+    public const string CIB = "818147";
+    public const string ECOBANK = "050";
+    public const string FBN = "011";
+    public const string FCMB = "214";
+    public const string FIDELITY = "070";
+    public const string GLOBUS = "00103";
+    public const string GTB = "058";
+    public const string HERITAGE = "030";
+    public const string HSBC = "818039";
+    public const string KEYSTONE = "082";
+    public const string KUDA = "50211";
+    public const string MBS = "041";
+    public const string MPESA = "404001";
+    public const string PROVIDUS = "101";
+    public const string POLARIS = "076";
+    public const string STANBIC = "221";
+    public const string STERLING = "232";
+    public const string UBA = "033";
+    public const string UNITY = "215";
+    public const string UNION = "032";
+    public const string ZENITH = "057";
 }
 
 public static class BankExtensions
@@ -53,7 +54,7 @@ public static class BankExtensions
 
                 if (bankList != null)
                 {
-                   var result = new List<(string, string)>();
+                    var result = new List<(string, string)>();
                     foreach (var bank in bankList)
                     {
                         string name = bank["name"];
