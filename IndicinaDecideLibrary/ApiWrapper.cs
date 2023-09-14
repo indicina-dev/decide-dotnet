@@ -186,7 +186,7 @@ public class DecideAPI
             // Set the authorization header
             string authToken = _authorization.GetAccessToken();
 
-            // Make the API call to analyze the CSV statement
+            // Make the API call to analyze the PDF statement
             var response = _httpClientService.PostAsync(url, formDataContent, authToken);
 
 
