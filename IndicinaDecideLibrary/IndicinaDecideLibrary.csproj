@@ -3,15 +3,68 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <!-- Validation -->
+    <EnablePackageValidation>true</EnablePackageValidation>
+
+    <!-- Documentation -->
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <!-- If all members are not documented, you can disable the compiler warnings -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+
+
+    <!-- Optional Metadata -->
+    <Authors>Indicina</Authors>
+    <Description>
+      The decide-dotnet Library is a C# library that provides functionality to analyze different types of bank statements, such as PDF, CSV, and JSON statements. It integrates with the Indicina Decide API to perform statement analysis and retrieve analysis results.
+    </Description>
+
+    <!-- PackageProjectUrl is different from the repository URL. It can be a documentation
+         website or a website explaining the project -->
+    <PackageProjectUrl>https://developers.indicina.co/docs</PackageProjectUrl>
+
+    <!-- A list of tags to help the search engine to understand the content of the package -->
+    <PackageTags>decide, library, indicina, statement-analysis</PackageTags>
+
+    <!-- License -->
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+
+    <!-- Icon -->
+    <PackageIcon>img.png</PackageIcon>
+
+    <!-- Docs -->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
     <PackageReference Include="MinVer" Version="4.3.0"/>
+    <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <None Remove="Models\"/>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\"/>
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Add a LICENSE.txt next to the csproj -->
+    <None Include="LICENSE.txt" Pack="true" PackagePath=""/>
+  </ItemGroup>
+  <ItemGroup>
+    <!--
+        Add an icon.png next to the csproj:
+        - Supported format: png, jpg
+        - Recommended dimensions: 128x128
+        - Maximum size: 1MB
+    -->
+    <None Include="img.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Add a README.md next to the csproj -->
+    <None Include="README.md" Pack="true" PackagePath=""/>
   </ItemGroup>
 </Project>
