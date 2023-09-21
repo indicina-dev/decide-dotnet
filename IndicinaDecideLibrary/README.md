@@ -1,6 +1,14 @@
-# decide-dotnet Library - WIP ⚠️
+![img.png](img.png)
 
-The decide-dotnet Library is a C# library that provides functionality to analyze different types of bank statements, such as PDF, CSV, and JSON statements. It integrates with the Indicina Decide API to perform statement analysis and retrieve analysis results.
+![Nuget](https://img.shields.io/nuget/v/IndicinaDecideLibraryPackage)
+![Nuget](https://img.shields.io/nuget/dt/IndicinaDecideLibraryPackage)
+![GitHub](https://img.shields.io/github/license/indicina-dev/decide-dotnet)
+![Maintenance](https://img.shields.io/maintenance/yes/2023)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/indicina-dev/decide-dotnet/publish.yml)
+
+# IndicinaDecideLibraryPackage
+
+The IndicinaDecideLibraryPackage is a C# library that provides functionality to analyze different types of bank statements, such as PDF, CSV, and JSON statements. It integrates with the Indicina Decide API to perform statement analysis and retrieve analysis results.
 
 ## Features
 
@@ -16,8 +24,15 @@ The decide-dotnet Library is a C# library that provides functionality to analyze
 
 ## Installation
 
-1. Clone the repository or download the source code.
-2. Add the `decide-dotnet` library to your solution.
+1. Installing Via Nuget
+```
+NuGet\Install-Package IndicinaDecideLibraryPackage -Version 0.1.0
+```
+
+2. Installing via the .NET Core command line interface
+```
+dotnet add package IndicinaDecideLibraryPackage --version 0.1.0
+```
 
 ## Usage
 1. Add a using statement for the IndicinaDecideLibrary
@@ -238,7 +253,7 @@ Console.WriteLine(response.Data.ScorecardResults.ToJson());
 Make sure to replace Bank.Access, customer, Currency.NGN, filePath, password, csvPath, format, and statementString with the appropriate values for your use case.
 
 ## Contributing
-Contributions to the decide-dotnet Library are welcome! If you encounter any issues or have suggestions for improvements, please open an issue or submit a pull request on the project's GitHub repository.
+Contributions to the IndicinaDecideLibraryPackage Library are welcome! If you encounter any issues or have suggestions for improvements, please open an issue or submit a pull request on the project's GitHub repository.
 
 ## License
 This project is licensed under the MIT License.
